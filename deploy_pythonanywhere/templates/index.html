@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prediksi AQI Jakarta</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════ SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">
+      <div class="logo-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="rgba(255,255,255,0.9)"/>
+          <circle cx="12" cy="9" r="2.5" fill="#2b579a"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <span class="logo-title">AQI Jakarta</span>
+        <span class="logo-sub" data-i18n="logo_sub">Prediksi Harian</span>
+      </div>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="nav-item active" data-page="dashboard" href="#">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+        <rect x="3" y="3" width="7" height="7" rx="1.5" fill="currentColor"/>
+        <rect x="14" y="3" width="7" height="7" rx="1.5" fill="currentColor" opacity=".6"/>
+        <rect x="3" y="14" width="7" height="7" rx="1.5" fill="currentColor" opacity=".6"/>
+        <rect x="14" y="14" width="7" height="7" rx="1.5" fill="currentColor" opacity=".6"/>
+      </svg>
+      <span data-i18n="nav_dashboard">Dashboard</span>
+    </a>
+    <a class="nav-item" data-page="prediction" href="#">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+        <path d="M3 17l5-5 4 4 9-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="21" cy="7" r="2" fill="currentColor"/>
+      </svg>
+      <span data-i18n="nav_prediction">Prediksi</span>
+    </a>
+    <a class="nav-item" data-page="preload" href="#">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <polyline points="17 8 12 3 7 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <line x1="12" y1="3" x2="12" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span data-i18n="nav_preload">Preload Data</span>
+    </a>
+    <a class="nav-item" data-page="daily" href="#">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+        <rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+        <line x1="3" y1="9" x2="21" y2="9" stroke="currentColor" stroke-width="2"/>
+        <line x1="9" y1="4" x2="9" y2="9" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="15" y1="4" x2="15" y2="9" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="7" y1="14" x2="17" y2="14" stroke="currentColor" stroke-width="1.5" opacity=".6"/>
+        <line x1="7" y1="18" x2="14" y2="18" stroke="currentColor" stroke-width="1.5" opacity=".6"/>
+      </svg>
+      <span data-i18n="nav_daily">Data Harian</span>
+    </a>
+    <a class="nav-item" data-page="about" href="#">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+        <line x1="12" y1="8" x2="12" y2="8.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <line x1="12" y1="11" x2="12" y2="16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span data-i18n="nav_about">Tentang</span>
+    </a>
+  </nav>
+
+  <!-- Subscribe -->
+  <div class="sidebar-subscribe">
+    <p class="subscribe-label" data-i18n="subscribe_label">Notifikasi AQI harian</p>
+    <form class="subscribe-form" id="subscribeForm">
+      <input type="email" id="subscribeEmail" class="subscribe-input"
+        data-i18n-placeholder="subscribe_placeholder" placeholder="Masukkan email" required />
+      <button type="submit" class="subscribe-btn" data-i18n="subscribe_btn">Daftar</button>
+    </form>
+    <p class="subscribe-msg" id="subscribeMsg"></p>
+  </div>
+
+  <!-- Notify button -->
+  <div class="sidebar-notify">
+    <button class="notify-btn" id="notifyBtn" onclick="sendNotification()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+        <path d="M22 16.74V4a2 2 0 00-2-2H4a2 2 0 00-2 2v16l4-4h14a2 2 0 002-2z"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span data-i18n="notify_btn">Kirim Notifikasi AQI</span>
+    </button>
+    <p class="notify-msg" id="notifyMsg"></p>
+  </div>
+
+  <!-- Language toggle + version -->
+  <div class="sidebar-footer">
+    <div class="lang-toggle">
+      <button class="lang-btn active" id="btnID" onclick="setLang('id')">ID</button>
+      <span class="lang-sep">|</span>
+      <button class="lang-btn" id="btnEN" onclick="setLang('en')">EN</button>
+    </div>
+
+  </div>
+</aside>
+
+<!-- Hamburger (mobile) -->
+<button class="hamburger" id="hamburger" aria-label="Menu">
+  <span></span><span></span><span></span>
+</button>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- ═══════════════════════════════════════════════════════ MAIN -->
+<main class="main-content" id="mainContent">
+
+  <!-- Timestamp -->
+  <div class="topbar">
+    <div class="page-breadcrumb" id="pageBreadcrumb" data-i18n="nav_dashboard">Dashboard</div>
+    <div class="topbar-right">
+      <span class="timestamp-label" data-i18n="updated_at">Diperbarui:</span>
+      <span class="timestamp-value" id="globalTimestamp">—</span>
+    </div>
+  </div>
+
+  <!-- ─────────── PAGE: DASHBOARD ─────────── -->
+  <section class="page active" id="page-dashboard">
+
+    <!-- Row 1: 2 Gauge + stat -->
+    <div class="dash-top stagger-1">
+      <!-- Gauge kiri: AQI hari ini -->
+      <div class="card card-gauge-half">
+        <div class="card-label" data-i18n="dashboard_aqi_now">AQI Jakarta Hari Ini</div>
+        <div class="gauge-wrap">
+          <canvas id="gaugeToday" width="180" height="180"></canvas>
+          <div class="gauge-center">
+            <div class="aqi-number" id="aqiTodayNumber">—</div>
+            <div class="aqi-pill" id="aqiTodayPill">—</div>
+          </div>
+        </div>
+        <div class="card-meta" id="aqiTodayStation">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="currentColor"/>
+          </svg>
+          KBN Marunda Jakarta Utara
+        </div>
+        <div id="dashboardSpinner" class="spinner-wrap"><div class="spinner"></div></div>
+      </div>
+
+      <!-- Gauge kanan: Prediksi besok -->
+      <div class="card card-gauge-half">
+        <div class="card-label" data-i18n="pred_tomorrow">Prediksi AQI Besok</div>
+        <div class="gauge-wrap">
+          <canvas id="gaugeDashTomorrow" width="180" height="180"></canvas>
+          <div class="gauge-center">
+            <div class="aqi-number" id="dashTomorrowNum">—</div>
+            <div class="aqi-pill" id="dashTomorrowPill">—</div>
+          </div>
+        </div>
+        <div class="gauge-date" id="dashTomorrowDate">—</div>
+        <div id="dashPredSpinner" class="spinner-wrap"><div class="spinner"></div></div>
+      </div>
+
+      <!-- Kartu stat: hari data -->
+      <div class="card card-stat card-stat--public">
+        <div class="stat-corner-icon">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+            <ellipse cx="12" cy="5" rx="9" ry="3" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M3 5v6c0 1.66 4.03 3 9 3s9-1.34 9-3V5" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M3 11v6c0 1.66 4.03 3 9 3s9-1.34 9-3v-6" stroke="currentColor" stroke-width="1.8"/>
+          </svg>
+        </div>
+        <div class="stat-body">
+          <div class="stat-value stat-value--large" id="statDaysAvail">—</div>
+          <div class="stat-label stat-label--muted" data-i18n="stat_days">Hari data tersedia</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 2: Rekomendasi hari ini + besok -->
+    <div class="dash-rec-row stagger-2">
+      <div class="card card-rec" id="dashRec">
+        <div class="rec-bar" id="dashRecBar"></div>
+        <div class="rec-content">
+          <div class="rec-title" data-i18n="rec_title">Rekomendasi Hari Ini</div>
+          <div class="rec-text" id="dashRecText" data-i18n="rec_waiting">Memuat data AQI…</div>
+        </div>
+      </div>
+      <div class="card card-rec" id="dashPredRec" style="display:none">
+        <div class="rec-bar" id="dashPredRecBar"></div>
+        <div class="rec-content">
+          <div class="rec-title" data-i18n="pred_rec_title">Rekomendasi untuk Besok</div>
+          <div class="rec-text" id="dashPredRecText"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 3: Tren AQI -->
+    <div class="card stagger-3" id="dashChartCard" style="display:none">
+      <div class="card-title-row">
+        <div class="card-title" data-i18n="pred_chart_title">Tren AQI 8 Hari Terakhir</div>
+        <div class="chart-legend">
+          <span class="legend-bar legend-bar--solid"></span>
+          <span data-i18n="legend_history">Historis</span>
+          <span class="legend-bar legend-bar--faded"></span>
+          <span data-i18n="legend_pred">Prediksi</span>
+        </div>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="dashChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Pesan tidak cukup data -->
+    <div class="card card-empty stagger-3" id="dashEmptyState" style="display:none">
+      <div class="empty-title" data-i18n="pred_empty_title">Belum ada data prediksi</div>
+      <div class="empty-msg" data-i18n="pred_empty_msg">Belum ada data. Upload CSV historis dulu ya — minimal 8 hari diperlukan untuk prediksi.</div>
+      <a href="#" class="btn-primary" onclick="navigateTo('preload'); return false;" data-i18n="pred_go_preload">Upload Data Historis</a>
+    </div>
+
+
+
+    <!-- Row 5: Model Performance -->
+    <div class="card stagger-5" id="dashModelCard">
+      <div class="card-title" data-i18n="stat_section_model">Model Performance &amp; System Status</div>
+      <div class="model-status-grid">
+        <div class="model-status-item">
+          <div class="ms-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/>
+              <path d="M8 12l3 3 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="ms-body">
+            <div class="ms-value">Random Forest</div>
+            <div class="ms-label" data-i18n="stat_model">Model prediksi</div>
+          </div>
+        </div>
+        <div class="model-status-item">
+          <div class="ms-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M18 20V10M12 20V4M6 20v-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="ms-body">
+            <div class="ms-value">MAE 11.69</div>
+            <div class="ms-label" data-i18n="stat_mae">Akurasi model (test)</div>
+          </div>
+        </div>
+        <div class="model-status-item">
+          <div class="ms-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="ms-body">
+            <div class="ms-value">T-8 Lag</div>
+            <div class="ms-label">Feature window</div>
+          </div>
+        </div>
+        <div class="model-status-item">
+          <div class="ms-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.8"/>
+              <path d="M3 9h18M9 21V9" stroke="currentColor" stroke-width="1.8"/>
+            </svg>
+          </div>
+          <div class="ms-body">
+            <div class="ms-value">DKI 2 Kebon Jeruk</div>
+            <div class="ms-label" data-i18n="about_station">Stasiun latih</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ─────────── PAGE: PREDIKSI (CSV only) ─────────── -->
+  <section class="page" id="page-prediction">
+
+    <!-- Pesan tidak cukup data (CSV) -->
+    <div class="card card-empty stagger-1" id="predEmptyState" style="display:none">
+      <div class="empty-title" data-i18n="pred_empty_title">Belum ada data</div>
+      <div class="empty-msg" data-i18n="pred_empty_msg">Belum ada data. Upload CSV historis dulu ya — minimal 8 hari diperlukan untuk prediksi.</div>
+      <a href="#" class="btn-primary" onclick="navigateTo('preload'); return false;" data-i18n="pred_go_preload">Upload Data Historis</a>
+    </div>
+
+    <!-- Divider -->
+    <div class="section-divider stagger-1">
+      <span data-i18n="pred_divider">Prediksi dari stasiun lain</span>
+    </div>
+
+    <!-- Upload CSV + Disclaimer berdampingan -->
+    <div class="pred-bottom-row stagger-4">
+      <!-- Upload CSV -->
+      <div class="card card-upload">
+        <div class="card-title" data-i18n="csv_upload_title">Prediksi dari CSV</div>
+        <div class="card-sub" data-i18n="csv_upload_sub">Upload CSV dengan kolom <code>date</code> + <code>AQI</code> (minimal 8 baris)</div>
+        <div class="drop-zone" id="predDropZone">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" stroke="#2b579a" stroke-width="1.8" stroke-linecap="round"/>
+            <polyline points="17 8 12 3 7 8" stroke="#2b579a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="12" y1="3" x2="12" y2="15" stroke="#2b579a" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          <p data-i18n="drop_zone_text">Drag & drop CSV di sini, atau klik untuk pilih</p>
+          <input type="file" id="predCsvInput" accept=".csv" hidden />
+        </div>
+        <div id="predCsvMsg" class="upload-msg"></div>
+
+        <!-- Hasil prediksi CSV -->
+        <div id="predCsvResult" style="display:none">
+          <div class="gauge-wrap" style="margin:16px auto 0">
+            <canvas id="gaugeCsv" width="160" height="160"></canvas>
+            <div class="gauge-center">
+              <div class="aqi-number" id="csvAqiNum">—</div>
+              <div class="aqi-pill" id="csvAqiPill">—</div>
+            </div>
+          </div>
+          <div class="csv-pred-date" id="csvPredDate"></div>
+          <div class="card card-rec" id="csvRec" style="margin-top:12px">
+            <div class="rec-bar" id="csvRecBar"></div>
+            <div class="rec-content">
+              <div class="rec-text" id="csvRecText"></div>
+            </div>
+          </div>
+          <div class="chart-wrap" style="margin-top:16px">
+            <canvas id="csvChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Disclaimer -->
+      <div class="card card-disclaimer">
+        <div class="card-title" data-i18n="disclaimer_title">Disclaimer</div>
+        <ul class="disclaimer-list">
+          <li data-i18n="disclaimer_1">Model dilatih pada data stasiun DKI 2 Kebon Jeruk, Jakarta Barat.</li>
+          <li data-i18n="disclaimer_2">Data real-time diambil dari stasiun KBN Marunda, Jakarta Utara — mungkin berbeda dari stasiun latih.</li>
+          <li data-i18n="disclaimer_3">AQI dihitung berdasarkan PM2.5 sebagai polutan dominan.</li>
+          <li data-i18n="disclaimer_4">Akurasi prediksi dapat bervariasi tergantung kondisi cuaca dan aktivitas industri.</li>
+          <li data-i18n="disclaimer_5">Gunakan prediksi ini sebagai panduan, bukan keputusan medis.</li>
+        </ul>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ─────────── PAGE: PRELOAD DATA ─────────── -->
+  <section class="page" id="page-preload">
+
+    <div class="card stagger-1">
+      <div class="card-title" data-i18n="preload_title">Upload Data Historis</div>
+      <div class="card-sub" data-i18n="preload_sub">Upload CSV untuk mengisi database. Dibutuhkan minimal 8 hari data agar prediksi otomatis bisa dijalankan.</div>
+
+      <div class="preload-format">
+        <div class="format-label" data-i18n="preload_format">Format CSV yang diterima:</div>
+        <div class="format-table-wrap">
+          <table class="format-table">
+            <thead>
+              <tr>
+                <th>date</th>
+                <th>AQI</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>2025-01-01</td><td>65</td></tr>
+              <tr><td>2025-01-02</td><td>78</td></tr>
+              <tr><td>2025-01-03</td><td>82</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="format-note" data-i18n="preload_format_note">Nama kolom alternatif: <code>tanggal</code>, <code>datetime</code> / <code>ispu</code>, <code>pm25</code></div>
+      </div>
+
+      <div class="drop-zone" id="preloadDropZone">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none">
+          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" stroke="#2b579a" stroke-width="1.8" stroke-linecap="round"/>
+          <polyline points="17 8 12 3 7 8" stroke="#2b579a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="12" y1="3" x2="12" y2="15" stroke="#2b579a" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        <p data-i18n="drop_zone_text">Drag & drop CSV di sini, atau klik untuk pilih</p>
+        <input type="file" id="preloadCsvInput" accept=".csv" hidden />
+      </div>
+
+      <div id="preloadMsg" class="upload-msg"></div>
+      <div id="preloadResult" class="preload-result" style="display:none">
+        <div class="result-row">
+          <div class="result-item">
+            <div class="result-num" id="preloadInserted">—</div>
+            <div class="result-lbl" data-i18n="preload_inserted">Data baru</div>
+          </div>
+          <div class="result-item">
+            <div class="result-num" id="preloadSkipped">—</div>
+            <div class="result-lbl" data-i18n="preload_skipped">Dilewati</div>
+          </div>
+          <div class="result-item">
+            <div class="result-num" id="preloadTotal">—</div>
+            <div class="result-lbl" data-i18n="preload_total">Total baris</div>
+          </div>
+        </div>
+        <div class="result-msg" id="preloadResultMsg"></div>
+      </div>
+    </div>
+
+    <div class="card stagger-2">
+      <div class="card-title" data-i18n="preload_tip_title">Tips Penggunaan</div>
+      <ul class="tip-list">
+        <li data-i18n="preload_tip_1">Upload minimal 8 hari data untuk mengaktifkan prediksi otomatis.</li>
+        <li data-i18n="preload_tip_2">Data duplikat (tanggal sama) otomatis dilewati, tidak akan ada data ganda.</li>
+        <li data-i18n="preload_tip_3">Setelah preload berhasil, buka halaman Prediksi untuk melihat hasil.</li>
+        <li data-i18n="preload_tip_4">Data real-time dari API AQICN otomatis ditambahkan setiap kali halaman dibuka.</li>
+      </ul>
+    </div>
+
+  </section>
+
+  <!-- ─────────── PAGE: DATA HARIAN ─────────── -->
+  <section class="page" id="page-daily">
+
+    <div class="card stagger-1">
+      <div class="card-title-row">
+        <div class="card-title" data-i18n="daily_title">Data AQI Harian</div>
+        <div class="daily-count">
+          <span id="dailyCount">—</span>
+          <span data-i18n="daily_count_label">data</span>
+        </div>
+      </div>
+
+      <div id="dailySpinner" class="spinner-wrap" style="padding:24px 0">
+        <div class="spinner"></div>
+      </div>
+
+      <div class="table-wrap" id="dailyTableWrap" style="display:none">
+        <table class="data-table" id="dailyTable">
+          <thead>
+            <tr>
+              <th data-i18n="col_date">Tanggal</th>
+              <th data-i18n="col_aqi">AQI</th>
+              <th data-i18n="col_category">Kategori</th>
+              <th data-i18n="col_source">Sumber</th>
+              <th data-i18n="col_station">Stasiun</th>
+            </tr>
+          </thead>
+          <tbody id="dailyTableBody"></tbody>
+        </table>
+      </div>
+
+      <div class="card-empty" id="dailyEmpty" style="display:none">
+        <div class="empty-icon">📂</div>
+        <div class="empty-title" data-i18n="daily_empty_title">Belum ada data</div>
+        <div class="empty-msg" data-i18n="daily_empty_msg">Belum ada data. Upload CSV historis dulu ya</div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ─────────── PAGE: TENTANG ─────────── -->
+  <section class="page" id="page-about">
+
+    <div class="about-grid">
+
+      <div class="card stagger-1">
+        <div class="card-title" data-i18n="about_model_title">Tentang Model</div>
+        <div class="about-model-info">
+          <div class="model-badge">Random Forest</div>
+          <div class="model-sub" data-i18n="about_model_sub">T-8 Lag Features · Scikit-learn</div>
+        </div>
+        <table class="about-table">
+          <tbody>
+            <tr>
+              <td data-i18n="about_mae">MAE (Test)</td>
+              <td><strong>11.69</strong></td>
+            </tr>
+            <tr>
+              <td data-i18n="about_cc">Correlation (CC)</td>
+              <td><strong>0.74</strong></td>
+            </tr>
+            <tr>
+              <td data-i18n="about_train_data">Data Latih</td>
+              <td>2021 + 2023–2024 (1.066 obs)</td>
+            </tr>
+            <tr>
+              <td data-i18n="about_test_data">Data Uji</td>
+              <td>Jan–Nov 2025 (334 obs)</td>
+            </tr>
+            <tr>
+              <td data-i18n="about_station">Stasiun Latih</td>
+              <td>DKI 2 Kebon Jeruk, Jakarta Barat</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card stagger-2">
+        <div class="card-title" data-i18n="about_pipeline_title">Pipeline Model</div>
+        <div class="pipeline-steps">
+          <div class="pipeline-step">
+            <div class="step-badge">A</div>
+            <div class="step-body">
+              <div class="step-title" data-i18n="pipeline_a_title">Pengumpulan Data</div>
+              <div class="step-desc" data-i18n="pipeline_a_desc">Data AQI harian dari AQICN & KLHK, stasiun DKI 2 Kebon Jeruk</div>
+            </div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="step-badge">B</div>
+            <div class="step-body">
+              <div class="step-title" data-i18n="pipeline_b_title">Preprocessing</div>
+              <div class="step-desc" data-i18n="pipeline_b_desc">Imputasi nilai hilang, normalisasi, pembentukan fitur lag T-1 hingga T-8</div>
+            </div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="step-badge">C</div>
+            <div class="step-body">
+              <div class="step-title" data-i18n="pipeline_c_title">Feature Selection</div>
+              <div class="step-desc" data-i18n="pipeline_c_desc">Seleksi fitur lag optimal menggunakan korelasi dan importance RF</div>
+            </div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="step-badge">C'</div>
+            <div class="step-body">
+              <div class="step-title" data-i18n="pipeline_cp_title">Hyperparameter Tuning</div>
+              <div class="step-desc" data-i18n="pipeline_cp_desc">Optuna bayesian optimization, 100 trials per model</div>
+            </div>
+          </div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">
+            <div class="step-badge">E</div>
+            <div class="step-body">
+              <div class="step-title" data-i18n="pipeline_e_title">Evaluasi & Deployment</div>
+              <div class="step-desc" data-i18n="pipeline_e_desc">Model terbaik dievaluasi pada data test 2025, lalu di-deploy sebagai web app</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card stagger-3">
+        <div class="card-title" data-i18n="about_ref_title">Referensi</div>
+        <div class="ref-item">
+          <div class="ref-authors">Kumar, A., et al. (2025)</div>
+          <div class="ref-title-text">Machine Learning-Based Air Quality Index Prediction: A Comparative Study</div>
+          <div class="ref-journal">Environmental Science & Technology</div>
+        </div>
+        <div class="ref-item">
+          <div class="ref-authors">World Air Quality Index Project</div>
+          <div class="ref-title-text">WAQI API — Real-time Air Quality Data</div>
+          <div class="ref-journal">waqi.info</div>
+        </div>
+        <div class="ref-item">
+          <div class="ref-authors">Kementerian Lingkungan Hidup Dan Kehutanan (KLHK)</div>
+          <div class="ref-title-text">Data ISPU Stasiun Pemantau Udara DKI Jakarta</div>
+          <div class="ref-journal">Indonesia, 2021–2025</div>
+        </div>
+      </div>
+
+      <div class="card stagger-4">
+        <div class="card-title" data-i18n="about_disclaimer_title">Disclaimer</div>
+        <ul class="disclaimer-list">
+          <li data-i18n="disclaimer_1">Model dilatih pada data stasiun DKI 2 Kebon Jeruk, Jakarta Barat.</li>
+          <li data-i18n="disclaimer_2">Data real-time diambil dari stasiun KBN Marunda, Jakarta Utara — mungkin berbeda dari stasiun latih.</li>
+          <li data-i18n="disclaimer_3">AQI dihitung berdasarkan PM2.5 sebagai polutan dominan.</li>
+          <li data-i18n="disclaimer_4">Akurasi prediksi dapat bervariasi tergantung kondisi cuaca dan aktivitas industri.</li>
+          <li data-i18n="disclaimer_5">Gunakan prediksi ini sebagai panduan, bukan keputusan medis.</li>
+        </ul>
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="/static/js/main.js"></script>
+</body>
+</html>
